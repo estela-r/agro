@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Plots;
 
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Plots\Handler\PlotsReadHandler;
 use Plots\Handler\PlotsReadHandlerFactory;
 use Zend\Expressive\Application;
@@ -26,6 +28,7 @@ class ConfigProvider
         return [
             'dependencies' => $this->getDependencies(),
             'templates'    => $this->getTemplates(),
+            'doctrine'     => $this->getDoctrineEntities(),            
         ];
     }
 
@@ -59,4 +62,24 @@ class ConfigProvider
             ],
         ];
     }
+
+    public function getDoctrineEntities() : array
+    {
+        return [
+            'driver' => [
+                'orm_default' => [
+                    'class' => MappingDriverChain::class,
+                    'drivers' => [
+                        'Plots\Entity' => 'plot_entity',
+                    ],
+                ],
+                'plot_entity' => [
+                    'class' => AnnotationDriver::class,
+                    'cache' => 'array',
+                    'paths' => [__DIR__ . '/Entity'],
+                ],
+            ],
+        ];
+    }
+
 }
