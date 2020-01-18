@@ -12,6 +12,7 @@ declare(strict_types=1);
 return [
     'dependencies' => [
         'factories' => [
+            Plots\Handler\PlotsCreateHandler::class => Plots\Handler\PlotsCreateHandlerFactory::class,
             Plots\Handler\PlotsReadHandler::class => Plots\Handler\PlotsReadHandlerFactory::class,
         ],
     ],

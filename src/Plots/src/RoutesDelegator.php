@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Plots;
 
+use Plots\Handler\PlotsCreateHandler;
 use Plots\Handler\PlotsReadHandler;
 use Plots\Handler\PlotsReadHandlerFactory;
 use Psr\Container\ContainerInterface;
@@ -21,9 +22,9 @@ class RoutesDelegator
         /** @var $app Application */
         $app = $callback();
 
-        $app->get('/plots[/]', [
-                PlotsReadHandler::class,
-            ], 'plots.read');
+        $app->post('/plots[/]', PlotsCreateHandler::class, 'plots.create');
+        // $app->get('/plots[/]', PlotsListHandler::class, 'plots.list');
+        $app->get('/plots/{id:\d+}', PlotsReadHandler::class, 'plots.read');
 
         return $app;
     }

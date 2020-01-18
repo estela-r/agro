@@ -6,9 +6,16 @@ namespace Plots;
 
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Plots\Entity\Plot;
+use Plots\Handler\PlotsCreateHandler;
+use Plots\Handler\PlotsCreateHandlerFactory;
 use Plots\Handler\PlotsReadHandler;
 use Plots\Handler\PlotsReadHandlerFactory;
 use Zend\Expressive\Application;
+use Zend\Expressive\Hal\Metadata\MetadataMap;
+use Zend\Expressive\Hal\Metadata\RouteBasedCollectionMetadata;
+use Zend\Expressive\Hal\Metadata\RouteBasedResourceMetadata;
+use Zend\Hydrator\ReflectionHydrator;
 
 /**
  * The configuration provider for the Plots module
@@ -27,8 +34,9 @@ class ConfigProvider
     {
         return [
             'dependencies' => $this->getDependencies(),
-            'templates'    => $this->getTemplates(),
-            'doctrine'     => $this->getDoctrineEntities(),            
+            'templates' => $this->getTemplates(),
+            'doctrine' => $this->getDoctrineEntities(),  
+            MetadataMap::class => $this->getHalMetadataMap(),                      
         ];
     }
 
@@ -46,7 +54,8 @@ class ConfigProvider
             'invokables' => [
             ],
             'factories'  => [
-                PlotsReadHandler::class => PlotsReadHandlerFactory::class
+                PlotsReadHandler::class => PlotsReadHandlerFactory::class,
+                PlotsCreateHandler::class => PlotsCreateHandlerFactory::class
             ],
         ];
     }
@@ -81,5 +90,23 @@ class ConfigProvider
             ],
         ];
     }
+
+    public function getHalMetadataMap()
+    {
+        return [
+            [
+                '__class__' => RouteBasedResourceMetadata::class,
+                'resource_class' => Plot::class,
+                'route' => 'plots.read',
+                'extractor' => ReflectionHydrator::class,
+            ],
+            // [
+            //     '__class__' => RouteBasedCollectionMetadata::class,
+            //     'collection_class' => PlotCollection::class,
+            //     'collection_relation' => 'plot',
+            //     'route' => 'plots.list',
+            // ],
+        ];
+    }    
 
 }

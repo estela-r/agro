@@ -9,12 +9,12 @@ use Psr\Container\ContainerInterface;
 use Zend\Expressive\Hal\HalResponseFactory;
 use Zend\Expressive\Hal\ResourceGenerator;
 
-class PlotsReadHandlerFactory
+class PlotsCreateHandlerFactory
 {
-    public function __invoke(ContainerInterface $container) : PlotsReadHandler
+    public function __invoke(ContainerInterface $container) : PlotsCreateHandler
     {
 
-        return new PlotsReadHandler(
+        return new PlotsCreateHandler(
             $container->get(EntityManager::class),
             $container->get(HalResponseFactory::class),
             $container->get(ResourceGenerator::class)

@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  **/
 class Plot
 {
+    
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", name="id", nullable=false)
@@ -33,6 +34,21 @@ class Plot
      * @ORM\Column(type="decimal", nullable=false)
      */
     protected $area;
+
+
+    private function __construct(string $name, string $crop, float $area) {
+        $this->name = $name;
+        $this->crop = $crop;
+        $this->area = $area;
+    }
+
+    public function createFromRequest(array $request) {
+        //TODO: validate area
+        $area = floatval($request["area"]);
+        
+        return new self($request["name"], $request["crop"], $area);
+    }
+
 
     /**
      * @return int
