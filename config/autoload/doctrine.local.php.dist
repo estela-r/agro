@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
+use Ramsey\Uuid\Doctrine\UuidType;
+
+return [
+    'doctrine' => [
+        'connection' => [
+            'orm_default' => [
+                'params' => [
+//                  'url' => 'mysql://dbuser:dbpassword@localhost/dbname',
+                    'driver' => 'pdo_mysql',
+                    'host' => 'localhost', 
+                    'dbname' => 'agro',
+                    'user' => 'agro_user',
+                    'password' => '1234567',
+                ],
+            ],
+        ],
+        'types' => [
+            UuidType::NAME => UuidType::class,
+        ],
+        'driver' => [
+            'orm_default' => [
+                'class' => MappingDriverChain::class,
+                'drivers' => [
+                    'App\Entity' => 'app_entity',
+                ],
+            ],
+            'app_entity' => [
+                'class' => AnnotationDriver::class,
+                'cache' => 'array',
+                'paths' => [__DIR__ . '/../../src/App/src/Entity'],
+            ],
+        ],
+    ],
+];
