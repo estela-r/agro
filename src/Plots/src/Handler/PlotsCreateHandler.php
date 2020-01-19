@@ -7,6 +7,7 @@ namespace Plots\Handler;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Plots\Entity\Plot;
+use Plots\Validator\PlotInputFilter;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -18,33 +19,30 @@ class PlotsCreateHandler implements RequestHandlerInterface
     private $entityManager;
     private $halResponseFactory;
     private $resourceGenerator;
+    private $inputFilter;
 
     public function __construct(
         EntityManagerInterface $entityManager,
+        PlotInputFilter $inputFilter,
         HalResponseFactory $halResponseFactory,
         ResourceGenerator $resourceGenerator)
     {
         $this->entityManager = $entityManager;
+        $this->inputFilter = $inputFilter;
         $this->halResponseFactory = $halResponseFactory;
         $this->resourceGenerator = $resourceGenerator;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        // try {
-            //TODO test with empty request body etc
-            $plot = Plot::createFromRequest($request->getParsedBody());
-            $this->entityManager->persist($plot);
-            $this->entityManager->flush();
+        $plot = Plot::createFromArray($request->getParsedBody(), $this->inputFilter);
+        $this->entityManager->persist($plot);
+        $this->entityManager->flush();
 
-            $resource = $this->resourceGenerator->fromObject($plot, $request);
-
-            return $this->halResponseFactory->createResponse($request, $resource);
-
-        // } catch(Exception $e) {
-
-        //     return new JsonResponse(["error" => "afsd"], 400);
-        // }
+        return $this->halResponseFactory->createResponse(
+            $request,
+            $this->resourceGenerator->fromObject($plot, $request)
+        );
 
     }
 }

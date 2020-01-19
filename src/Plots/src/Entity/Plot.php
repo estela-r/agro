@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Plots\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use DomainException;
+use Plots\Exception\InvalidParameterException;
+use Plots\Validator\PlotInputFilter;
 
 /**
  * @ORM\Entity
@@ -31,22 +34,39 @@ class Plot
     protected $crop;
 
     /**
+     * Plot area in sqaure meters.
+     * 
      * @ORM\Column(type="decimal", nullable=false)
      */
     protected $area;
 
 
     private function __construct(string $name, string $crop, float $area) {
+        
+        if ($area <= 0) {
+            
+            throw new DomainException(sprintf("Invalid area: %s", $area));
+        }
+
         $this->name = $name;
         $this->crop = $crop;
         $this->area = $area;
     }
 
-    public function createFromRequest(array $request) {
-        //TODO: validate area
-        $area = floatval($request["area"]);
+    public function createFromArray(array $request, PlotInputFilter $inputFilter): self {
         
-        return new self($request["name"], $request["crop"], $area);
+        $inputFilter->setData($request);
+
+        if (! $inputFilter->isValid()) {
+
+            throw InvalidParameterException::create('Invalid parameter', $inputFilter->getMessages());
+        }
+
+        return new self(
+            $inputFilter->getValues()["name"],
+            $inputFilter->getValues()["crop"],
+            $inputFilter->getValues()["area"]
+        );
     }
 
 
@@ -64,14 +84,6 @@ class Plot
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName(string $name): void
-    {
-        $this->name = $name;
     }
 
 }

@@ -35,7 +35,9 @@ class PlotsReadHandler implements RequestHandlerInterface
         
         $plot = $this->entityManager->getRepository(Plot::class)->find($id);
         
-        $resource = $this->resourceGenerator->fromObject($plot, $request);
-
-        return $this->halResponseFactory->createResponse($request, $resource);    }
+        return $this->halResponseFactory->createResponse(
+            $request,
+            $this->resourceGenerator->fromObject($plot, $request)
+        );
+    }
 }

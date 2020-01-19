@@ -13,6 +13,10 @@ $cacheConfig = [
 ];
 
 $aggregator = new ConfigAggregator([
+    \Zend\ProblemDetails\ConfigProvider::class,
+    \Zend\InputFilter\ConfigProvider::class,
+    \Zend\Filter\ConfigProvider::class,
+    \Zend\Validator\ConfigProvider::class,
     \Zend\Hydrator\ConfigProvider::class,
     \Zend\Expressive\Hal\ConfigProvider::class,
     \Plots\ConfigProvider::class,

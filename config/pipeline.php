@@ -14,6 +14,7 @@ use Zend\Expressive\Router\Middleware\ImplicitHeadMiddleware;
 use Zend\Expressive\Router\Middleware\ImplicitOptionsMiddleware;
 use Zend\Expressive\Router\Middleware\MethodNotAllowedMiddleware;
 use Zend\Expressive\Router\Middleware\RouteMiddleware;
+use Zend\ProblemDetails\ProblemDetailsMiddleware;
 use Zend\Stratigility\Middleware\ErrorHandler;
 
 /**
@@ -23,6 +24,10 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     // The error handler should be the first (most outer) middleware to catch
     // all Exceptions.
     $app->pipe(ErrorHandler::class);
+    
+    // Always use Problem Details format for calls to the API.
+    $app->pipe('/api', ProblemDetailsMiddleware::class);    
+
     $app->pipe(ServerUrlMiddleware::class);
 
     // Pipe more middleware here that you want to execute on every request:

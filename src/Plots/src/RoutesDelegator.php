@@ -22,9 +22,9 @@ class RoutesDelegator
         /** @var $app Application */
         $app = $callback();
 
-        $app->post('/plots[/]', PlotsCreateHandler::class, 'plots.create');
-        // $app->get('/plots[/]', PlotsListHandler::class, 'plots.list');
-        $app->get('/plots/{id:\d+}', PlotsReadHandler::class, 'plots.read');
+        $app->post('/api/plots[/]', PlotsCreateHandler::class, 'plots.create');
+        $app->get('/api/plots[/]', PlotsListHandler::class, 'plots.list');
+        $app->get('/api/plots/{id:\d+}', PlotsReadHandler::class, 'plots.read');
 
         return $app;
     }
