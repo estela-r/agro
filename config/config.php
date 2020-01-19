@@ -20,6 +20,8 @@ $aggregator = new ConfigAggregator([
     \Zend\Hydrator\ConfigProvider::class,
     \Zend\Expressive\Hal\ConfigProvider::class,
     \Plots\ConfigProvider::class,
+    \Tractors\ConfigProvider::class,
+    \Tillage\ConfigProvider::class,    
     \Zend\HttpHandlerRunner\ConfigProvider::class,
     \Zend\Expressive\Twig\ConfigProvider::class,
     \Zend\Expressive\Router\FastRouteRouter\ConfigProvider::class,

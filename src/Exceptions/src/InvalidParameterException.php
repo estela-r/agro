@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Plots\Exception;
+namespace Exceptions;
 
 use DomainException;
 use Zend\ProblemDetails\Exception\CommonProblemDetailsExceptionTrait;

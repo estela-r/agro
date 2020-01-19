@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Plots;
+namespace Tillage;
 
-use Plots\Handler\PlotsCreateHandler;
-use Plots\Handler\PlotsReadHandler;
 use Psr\Container\ContainerInterface;
+use Tillage\Handler\CreateTillageHandler;
+
 
 class RoutesDelegator
 {
@@ -21,9 +21,8 @@ class RoutesDelegator
         /** @var $app Application */
         $app = $callback();
 
-        $app->post('/api/plots[/]', PlotsCreateHandler::class, 'plots.create');
-        // $app->get('/api/plots[/]', PlotsListHandler::class, 'plots.list');
-        $app->get('/api/plots/{id:\d+}', PlotsReadHandler::class, 'plots.read');
+        $app->post('/api/tillage[/]', CreateTillageHandler::class, 'tillage.create');
+        $app->get('/api/tillage/{id:\d+}', ReadTillageHandler::class, 'tillage.read');
 
         return $app;
     }

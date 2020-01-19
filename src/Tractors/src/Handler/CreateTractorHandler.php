@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Plots\Handler;
+namespace Tractors\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Plots\Entity\Plot;
-use Plots\Validator\PlotInputFilter;
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Tractors\Entity\Tractor;
 use Zend\Expressive\Hal\HalResponseFactory;
 use Zend\Expressive\Hal\ResourceGenerator;
+use Zend\InputFilter\InputFilterInterface;
 
-class PlotsCreateHandler implements RequestHandlerInterface
+class CreateTractorHandler implements RequestHandlerInterface
 {
     private $entityManager;
     private $halResponseFactory;
@@ -22,7 +23,7 @@ class PlotsCreateHandler implements RequestHandlerInterface
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        PlotInputFilter $inputFilter,
+        InputFilterInterface $inputFilter,
         HalResponseFactory $halResponseFactory,
         ResourceGenerator $resourceGenerator)
     {
@@ -34,7 +35,7 @@ class PlotsCreateHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $plot = Plot::createFromArray($request->getParsedBody(), $this->inputFilter);
+        $plot = Tractor::createFromArray($request->getParsedBody(), $this->inputFilter);
         $this->entityManager->persist($plot);
         $this->entityManager->flush();
 

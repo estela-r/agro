@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Plots;
+namespace Tractors;
 
-use Plots\Handler\PlotsCreateHandler;
-use Plots\Handler\PlotsReadHandler;
 use Psr\Container\ContainerInterface;
+use Tractors\Handler\CreateTractorHandler;
 
 class RoutesDelegator
 {
@@ -21,9 +20,8 @@ class RoutesDelegator
         /** @var $app Application */
         $app = $callback();
 
-        $app->post('/api/plots[/]', PlotsCreateHandler::class, 'plots.create');
-        // $app->get('/api/plots[/]', PlotsListHandler::class, 'plots.list');
-        $app->get('/api/plots/{id:\d+}', PlotsReadHandler::class, 'plots.read');
+        $app->post('/api/tractors[/]', CreateTractorHandler::class, 'tractors.create');
+        $app->get('/api/tractors/{id:\d+}', ReadTractorHandler::class, 'tractors.read');
 
         return $app;
     }

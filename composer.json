@@ -65,7 +65,10 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/App/src/",
-            "Plots\\": "src/Plots/src/"
+            "Plots\\": "src/Plots/src/",
+            "Tractors\\": "src/Tractors/src/",
+            "Tillage\\": "src/Tillage/src/",
+            "Exceptions\\": "src/Exceptions/src/"
         }
     },
     "autoload-dev": {

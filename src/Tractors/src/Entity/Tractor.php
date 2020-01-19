@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Plots\Entity;
+namespace Tractors\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use DomainException;
 use Exceptions\InvalidParameterException;
-use Plots\Validator\PlotInputFilter;
+use Tractors\Validator\TractorInputFilter;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="plots")
+ * @ORM\Table(name="tractors")
  **/
-class Plot
+class Tractor
 {
     
     /**
@@ -29,37 +29,22 @@ class Plot
     protected $name;
 
     /**
-     * @ORM\Column(type="string", nullable=false)
-     */
-    protected $crop;
-
-    /**
-     * Plot area in sqaure meters.
-     * 
-     * @ORM\Column(type="decimal", nullable=false)
-     */
-    protected $area;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Tillage\Entity\Tillage", mappedBy="plot")
+     * @ORM\OneToMany(targetEntity="Tillage\Entity\Tillage", mappedBy="tractor")
      */
     private $tillage;
 
-
-    private function __construct(string $name, string $crop, float $area) {
+    private function __construct(string $name) {
         
-        if ($area <= 0) {
+        if (!$name) {
             
-            throw new DomainException(sprintf("Invalid area: %s", $area));
+            throw new DomainException(sprintf("Invalid name: %s", $name));
         }
 
         $this->name = $name;
-        $this->crop = $crop;
-        $this->area = $area;
     }
 
-    public function createFromArray(array $request, PlotInputFilter $inputFilter): self {
-
+    public function createFromArray(array $request, TractorInputFilter $inputFilter): self {
+        
         $inputFilter->setData($request);
 
         if (! $inputFilter->isValid()) {
@@ -67,11 +52,7 @@ class Plot
             throw InvalidParameterException::create('Invalid parameter', $inputFilter->getMessages());
         }
 
-        return new self(
-            $inputFilter->getValues()["name"],
-            $inputFilter->getValues()["crop"],
-            $inputFilter->getValues()["area"]
-        );
+        return new self($inputFilter->getValues()["name"]);
     }
 
 
