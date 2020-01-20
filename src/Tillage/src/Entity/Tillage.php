@@ -7,12 +7,11 @@ namespace Tillage\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use DomainException;
-use Exceptions\InvalidParameterException;
 use Plots\Entity\Plot;
 use Tractors\Entity\Tractor;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="TillageRepository")
  * @ORM\Table(name="tillage")
  **/
 class Tillage
@@ -53,6 +52,11 @@ class Tillage
 
     public function __construct(Tractor $tractor, Plot $plot, float $area) {
         
+        if ($area > $plot->getArea()) {
+            
+            throw new DomainException(sprintf("Tillage area %s exceeds plot area %s", $area, $plot->getArea()));
+        }
+
         $this->tractor = $tractor;
         $this->plot = $plot;
         $this->area = $area;
@@ -74,6 +78,11 @@ class Tillage
     public function getTractor(): Tractor
     {
         return $this->tractor;
+    }
+ 
+    public function getArea(): float
+    {
+        return $this->area;
     }
 
 }

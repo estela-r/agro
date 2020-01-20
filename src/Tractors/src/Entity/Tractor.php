@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tractors\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use DomainException;
 use Exceptions\InvalidParameterException;
@@ -41,6 +42,7 @@ class Tractor
         }
 
         $this->name = $name;
+        $this->tillage = new ArrayCollection();
     }
 
     public function createFromArray(array $request, TractorInputFilter $inputFilter): self {

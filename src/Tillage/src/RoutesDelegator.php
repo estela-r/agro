@@ -6,7 +6,7 @@ namespace Tillage;
 
 use Psr\Container\ContainerInterface;
 use Tillage\Handler\CreateTillageHandler;
-
+use Tillage\Handler\ListTillageHandler;
 
 class RoutesDelegator
 {
@@ -22,7 +22,7 @@ class RoutesDelegator
         $app = $callback();
 
         $app->post('/api/tillage[/]', CreateTillageHandler::class, 'tillage.create');
-        $app->get('/api/tillage/{id:\d+}', ReadTillageHandler::class, 'tillage.read');
+        $app->get('/api/tillage[/]', ListTillageHandler::class, 'tillage.list');
 
         return $app;
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Plots\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use DomainException;
 use Exceptions\InvalidParameterException;
@@ -56,6 +57,7 @@ class Plot
         $this->name = $name;
         $this->crop = $crop;
         $this->area = $area;
+        $this->tillage = new ArrayCollection();
     }
 
     public function createFromArray(array $request, PlotInputFilter $inputFilter): self {
@@ -83,12 +85,10 @@ class Plot
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getName(): string
+
+    public function getArea(): float
     {
-        return $this->name;
+        return (float) $this->area;
     }
 
 }

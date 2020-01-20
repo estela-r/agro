@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Tillage\Entity\Tillage;
 use Tillage\Handler\CreateTillageHandler;
 use Tillage\Handler\CreateTillageHandlerFactory;
+use Tillage\Handler\ListTillageHandler;
+use Tillage\Handler\ListTillageHandlerFactory;
 use Zend\Expressive\Application;
 use Zend\Expressive\Hal\Metadata\MetadataMap;
 use Zend\Expressive\Hal\Metadata\RouteBasedResourceMetadata;
@@ -45,7 +47,8 @@ class ConfigProvider
             'invokables' => [
             ],
             'factories'  => [
-                CreateTillageHandler::class => CreateTillageHandlerFactory::class
+                CreateTillageHandler::class => CreateTillageHandlerFactory::class,
+                ListTillageHandler::class => ListTillageHandlerFactory::class
             ],
         ];
     }
